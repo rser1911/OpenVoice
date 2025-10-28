@@ -20,7 +20,7 @@ target_se, _ = se_extractor.get_se(reference_speaker, tone_color_converter, vad=
 
 qout = queue.Queue(maxsize=100)
 buf = queue.Queue(maxsize=100)
-mul = 16
+mul = 6
 silence = np.zeros((mul * 1024, 1), dtype=np.float32).tobytes()
 flag = True
 
@@ -149,8 +149,8 @@ try:
         if flag:
             audio = np.concatenate((buf_in, audio))
             end = last_silence_before_end(audio, sr=24_000,
-                                          win_ms=30, hop_ms=10,
-                                          thr_rms=8e-3, min_pause_ms=80)
+                                          win_ms=25, hop_ms=10,
+                                          thr_rms=None, min_pause_ms=30)
 
             cut = end if end is not None else len(audio)
             buf_in = audio[end:]
@@ -180,7 +180,7 @@ try:
                     buf_out = audio[mul * 1024:]
                     audio = audio[:mul * 1024]
                 else:
-                    audio = space
+                    audio = None
 
         if audio is not None:
             audio = audio.astype(np.float32, copy=False)
