@@ -3,9 +3,6 @@ import torch
 
 @torch.no_grad()
 def convt1d_chunked(deconv: torch.nn.ConvTranspose1d, x: torch.Tensor, chunk: int = 32768, overlap: int = 2):
-    if str(x.device) != "mps:0":
-        return deconv(x)
-    
     N, C, L = x.shape
     outs = []
     start = 0
@@ -28,9 +25,6 @@ def convt1d_chunked(deconv: torch.nn.ConvTranspose1d, x: torch.Tensor, chunk: in
 
 @torch.no_grad()
 def conv1d_chunked(conv: torch.nn.Conv1d, x: torch.Tensor, chunk: int = 32768, overlap: int = 2):
-    if str(x.device) != "mps:0":
-        return conv(x)
-    
     N, C, L = x.shape
     ys = []
     start = 0
